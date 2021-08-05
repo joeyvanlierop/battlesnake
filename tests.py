@@ -12,7 +12,7 @@ in the folder where this file exists:
 """
 import unittest
 
-from server_logic import avoid_my_neck
+from logic import avoid_my_neck
 
 
 class AvoidNeckTest(unittest.TestCase):
