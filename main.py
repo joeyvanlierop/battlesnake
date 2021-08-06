@@ -69,7 +69,7 @@ def end():
 
 
 @app.get("/metadata")
-def end():
+def metadata():
     """
     This function is used to verify the metadata of the battlesnake.
     It's purely for informational purposes, and will only be valuable when running on heroku.
