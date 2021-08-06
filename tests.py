@@ -46,7 +46,7 @@ class AvoidNeckTest(unittest.TestCase):
         result_moves = avoid_my_neck(test_head, test_body, possible_moves)
 
         # Assert
-        self.assertEqual(len(result_moves), 3)
+        self.assertEqual(len(result_moves), len(expected))
         self.assertEqual(expected, result_moves)
 
     def test_avoid_neck_right(self):
@@ -60,7 +60,7 @@ class AvoidNeckTest(unittest.TestCase):
         result_moves = avoid_my_neck(test_head, test_body, possible_moves)
 
         # Assert
-        self.assertEqual(len(result_moves), 3)
+        self.assertEqual(len(result_moves), len(expected))
         self.assertEqual(expected, result_moves)
 
     def test_avoid_neck_up(self):
@@ -74,7 +74,7 @@ class AvoidNeckTest(unittest.TestCase):
         result_moves = avoid_my_neck(test_head, test_body, possible_moves)
 
         # Assert
-        self.assertEqual(len(result_moves), 3)
+        self.assertEqual(len(result_moves), len(expected))
         self.assertEqual(expected, result_moves)
 
     def test_avoid_neck_down(self):
@@ -88,7 +88,7 @@ class AvoidNeckTest(unittest.TestCase):
         result_moves = avoid_my_neck(test_head, test_body, possible_moves)
 
         # Assert
-        self.assertEqual(len(result_moves), 3)
+        self.assertEqual(len(result_moves), len(expected))
         self.assertEqual(expected, result_moves)
 
 
@@ -123,7 +123,7 @@ class AvoidBodyTest(unittest.TestCase):
         result_moves = avoid_body(test_head, test_body, possible_moves)
 
         # Assert
-        self.assertEqual(len(result_moves), 3)
+        self.assertEqual(len(result_moves), len(expected))
         self.assertEqual(expected, result_moves)
 
     def test_avoid_body_right(self):
@@ -137,7 +137,7 @@ class AvoidBodyTest(unittest.TestCase):
         result_moves = avoid_body(test_head, test_body, possible_moves)
 
         # Assert
-        self.assertEqual(len(result_moves), 3)
+        self.assertEqual(len(result_moves), len(expected))
         self.assertEqual(expected, result_moves)
 
     def test_avoid_body_up(self):
@@ -151,7 +151,7 @@ class AvoidBodyTest(unittest.TestCase):
         result_moves = avoid_body(test_head, test_body, possible_moves)
 
         # Assert
-        self.assertEqual(len(result_moves), 3)
+        self.assertEqual(len(result_moves), len(expected))
         self.assertEqual(expected, result_moves)
 
     def test_avoid_body_down(self):
@@ -165,7 +165,22 @@ class AvoidBodyTest(unittest.TestCase):
         result_moves = avoid_body(test_head, test_body, possible_moves)
 
         # Assert
-        self.assertEqual(len(result_moves), 3)
+        self.assertEqual(len(result_moves), len(expected))
+        self.assertEqual(expected, result_moves)
+
+    def test_avoid_body_multiple(self):
+        # Arrange
+        test_head = {"x": 5, "y": 5}
+        test_body = [{"x": 5, "y": 5}, {"x": 5, "y": 4},
+                     {"x": 4, "y": 4}, {"x": 4, "y": 5}]
+        possible_moves = ["up", "down", "left", "right"]
+        expected = ["up", "right"]
+
+        # Act
+        result_moves = avoid_body(test_head, test_body, possible_moves)
+
+        # Assert
+        self.assertEqual(len(result_moves), len(expected))
         self.assertEqual(expected, result_moves)
 
 
