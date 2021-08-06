@@ -68,6 +68,21 @@ def end():
     return "ok"
 
 
+@app.get("/metadata")
+def end():
+    """
+    This function is used to verify the metadata of the battlesnake.
+    It's purely for informational purposes, and will only be valuable when running on heroku.
+    """
+    print("VERSION")
+    return {
+        "created_at": os.environ.get("HEROKU_RELEASE_CREATED_AT"),
+        "release_version": os.environ.get("HEROKU_RELEASE_VERSION"),
+        "slug_commit": os.environ.get("HEROKU_SLUG_COMMIT"),
+        "slug_description": os.environ.get("HEROKU_SLUG_DESCRIPTION"),
+    }
+
+
 if __name__ == "__main__":
     logging.getLogger("werkzeug").setLevel(logging.ERROR)
 
