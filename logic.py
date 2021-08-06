@@ -27,7 +27,7 @@ def avoid_my_neck(my_head: Dict[str, int], my_body: List[dict], possible_moves: 
     return possible_moves
 
 
-def avoid_my_body(my_head: Dict[str, int], my_body: List[dict], possible_moves: List[str]) -> List[str]:
+def avoid_body(my_head: Dict[str, int], my_body: List[dict], possible_moves: List[str]) -> List[str]:
     """
     my_head: Dictionary of x/y coordinates of the Battlesnake head.
             e.g. {"x": 0, "y": 0}
@@ -111,7 +111,12 @@ def choose_move(data: dict) -> str:
     possible_moves = avoid_my_neck(my_head, my_body, possible_moves)
 
     # Prevent snake from hitting itself
-    possible_moves = avoid_my_body(my_head, my_body, possible_moves)
+    possible_moves = avoid_body(my_head, my_body, possible_moves)
+
+    # Prevent snake from enemy snakes
+    enemy_bodies = data["snakes"]
+    for enemy_body in enemy_bodies:
+        possible_moves = avoid_body(my_head, enemy_body, possible_moves)
 
     # Prevent snake from moving off the edge of the board
     board_height = data["board"]["height"]

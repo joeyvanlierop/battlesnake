@@ -12,7 +12,7 @@ in the folder where this file exists:
 """
 import unittest
 
-from logic import avoid_my_neck, avoid_my_body
+from logic import avoid_my_neck, avoid_body
 
 
 class AvoidNeckTest(unittest.TestCase):
@@ -106,7 +106,7 @@ class AvoidBodyTest(unittest.TestCase):
         possible_moves = ["up", "down", "left", "right"]
 
         # Act
-        result_moves = avoid_my_body(test_head, test_body, possible_moves)
+        result_moves = avoid_body(test_head, test_body, possible_moves)
 
         # Assert
         self.assertEqual(len(result_moves), 4)
@@ -120,7 +120,7 @@ class AvoidBodyTest(unittest.TestCase):
         expected = ["up", "down", "right"]
 
         # Act
-        result_moves = avoid_my_body(test_head, test_body, possible_moves)
+        result_moves = avoid_body(test_head, test_body, possible_moves)
 
         # Assert
         self.assertEqual(len(result_moves), 3)
@@ -134,7 +134,7 @@ class AvoidBodyTest(unittest.TestCase):
         expected = ["up", "down", "left"]
 
         # Act
-        result_moves = avoid_my_body(test_head, test_body, possible_moves)
+        result_moves = avoid_body(test_head, test_body, possible_moves)
 
         # Assert
         self.assertEqual(len(result_moves), 3)
@@ -148,7 +148,7 @@ class AvoidBodyTest(unittest.TestCase):
         expected = ["down", "left", "right"]
 
         # Act
-        result_moves = avoid_my_body(test_head, test_body, possible_moves)
+        result_moves = avoid_body(test_head, test_body, possible_moves)
 
         # Assert
         self.assertEqual(len(result_moves), 3)
@@ -162,7 +162,7 @@ class AvoidBodyTest(unittest.TestCase):
         expected = ["up", "left", "right"]
 
         # Act
-        result_moves = avoid_my_body(test_head, test_body, possible_moves)
+        result_moves = avoid_body(test_head, test_body, possible_moves)
 
         # Assert
         self.assertEqual(len(result_moves), 3)
