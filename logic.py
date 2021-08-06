@@ -16,13 +16,13 @@ def avoid_my_neck(my_head: Dict[str, int], my_body: List[dict], possible_moves: 
     my_neck = my_body[1]  # The segment of body right after the head is the 'neck'
 
     if my_neck["x"] < my_head["x"]:    # Neck is left of head
-        possible_moves.remove("left")
+        possible_moves = remove_direction("left", possible_moves)
     elif my_neck["x"] > my_head["x"]:  # Neck is right of head
-        possible_moves.remove("right")
+        possible_moves = remove_direction("right", possible_moves)
     elif my_neck["y"] < my_head["y"]:  # Neck is below head
-        possible_moves.remove("down")
+        possible_moves = remove_direction("down", possible_moves)
     elif my_neck["y"] > my_head["y"]:  # Neck is above head
-        possible_moves.remove("up")
+        possible_moves = remove_direction("up", possible_moves)
 
     return possible_moves
 
@@ -40,17 +40,17 @@ def avoid_my_body(my_head: Dict[str, int], my_body: List[dict], possible_moves: 
     """
     up = {"x": my_head["x"], "y": my_head["y"] + 1}
     down = {"x": my_head["x"], "y": my_head["y"] - 1}
-    left = {"x": my_head["x"] + 1, "y": my_head["y"]}
-    right = {"x": my_head["x"] - 1, "y": my_head["y"]}
+    left = {"x": my_head["x"] - 1, "y": my_head["y"]}
+    right = {"x": my_head["x"] + 1, "y": my_head["y"]}
 
     if left in my_body:                 # Body is left of head
-        possible_moves.remove("left")
+        possible_moves = remove_direction("left", possible_moves)
     elif right in my_body:              # Body is right of head
-        possible_moves.remove("right")
+        possible_moves = remove_direction("right", possible_moves)
     elif down in my_body:               # Body is below of head
-        possible_moves.remove("down")
+        possible_moves = remove_direction("down", possible_moves)
     elif up in my_body:                 # Body is above of head
-        possible_moves.remove("up")
+        possible_moves = remove_direction("up", possible_moves)
 
     return possible_moves
 
@@ -65,14 +65,20 @@ def avoid_board_edge(my_head: Dict[str, int], board_height: int, board_width: in
     return: The list of remaining possible_moves, with the 'board edge' direction removed
     """
     if my_head["x"] == 0:                   # Head is on left edge of the board
-        possible_moves.remove("left")
+        possible_moves = remove_direction("left", possible_moves)
     elif my_head["x"] == board_width - 1:   # Head is on right edge of the board
-        possible_moves.remove("right")
+        possible_moves = remove_direction("right", possible_moves)
     if my_head["y"] == 0:                   # Head is on bottom edge of the board
-        possible_moves.remove("down")
+        possible_moves = remove_direction("down", possible_moves)
     elif my_head["y"] == board_height - 1:  # Head is on top edge of the board
-        possible_moves.remove("up")
+        possible_moves = remove_direction("up", possible_moves)
 
+    return possible_moves
+
+
+def remove_direction(direction: str, possible_moves: List[str]) -> List[str]:
+    if direction in possible_moves:
+        possible_moves.remove(direction)
     return possible_moves
 
 
@@ -106,13 +112,12 @@ def choose_move(data: dict) -> str:
 
     # Prevent snake from hitting itself
     possible_moves = avoid_my_body(my_head, my_body, possible_moves)
+
     # Prevent snake from moving off the edge of the board
     board_height = data["board"]["height"]
     board_width = data["board"]["width"]
     possible_moves = avoid_board_edge(
         my_head, board_height, board_width, possible_moves)
-
-    # TODO Using information from 'data', don't let your Battlesnake pick a move that would hit its own body
 
     # TODO: Using information from 'data', don't let your Battlesnake pick a move that would collide with another Battlesnake
 
