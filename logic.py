@@ -50,13 +50,13 @@ def avoid_body(my_head: Dict[str, int], body: List[dict], possible_moves: List[s
     if left in body:
         possible_moves = remove_direction("left", possible_moves)
     # Body is right of head
-    elif right in body:
+    if right in body:
         possible_moves = remove_direction("right", possible_moves)
     # Body is below head
-    elif down in body:
+    if down in body:
         possible_moves = remove_direction("down", possible_moves)
     # Body is above head
-    elif up in body:
+    if up in body:
         possible_moves = remove_direction("up", possible_moves)
 
     return possible_moves
@@ -121,13 +121,11 @@ def choose_move(data: dict) -> str:
     # Prevent snake from moving back in on it's own neck
     possible_moves = avoid_my_neck(my_head, my_body, possible_moves)
 
-    # Prevent snake from hitting itself
-    possible_moves = avoid_body(my_head, my_body, possible_moves)
-
-    # Prevent snake from enemy snakes
-    enemy_bodies = data["snakes"]
-    for enemy_body in enemy_bodies:
-        possible_moves = avoid_body(my_head, enemy_body, possible_moves)
+    # Prevent snake from hitting any snakes
+    snakes = data["board"]["snakes"]
+    for snake in snakes:
+        body = snake["body"]
+        possible_moves = avoid_body(my_head, body, possible_moves)
 
     # Prevent snake from moving off the edge of the board
     board_height = data["board"]["height"]
