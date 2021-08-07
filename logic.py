@@ -108,11 +108,10 @@ def find_closest_food(my_head: Dict[str, int], foods: List[Dict[str, int]]) -> D
             closest_distance = distance
             closest_food = food
 
-    print(closest_food)
     return closest_food
 
 
-def move_towards_food(my_head: Dict[str, int], food: Dict[str, int], possible_moves: List[str]) -> str:
+def move_towards_food(my_head: Dict[str, int], food: Dict[str, int], possible_moves: List[str]) -> List[str]:
     """
     my_head: Dictionary of x/y coordinates of the Battlesnake head.
             e.g. {"x": 0, "y": 0}
@@ -127,7 +126,6 @@ def move_towards_food(my_head: Dict[str, int], food: Dict[str, int], possible_mo
         return random.choice(possible_moves)
 
     towards_moves = []
-
     # Head is left of the food
     if my_head["x"] > food["x"]:
         if "left" in possible_moves:
@@ -145,7 +143,9 @@ def move_towards_food(my_head: Dict[str, int], food: Dict[str, int], possible_mo
         if "up" in possible_moves:
             towards_moves.append("up")
 
-    return random.choice(towards_moves)
+    if len(towards_moves) == 0:
+        return possible_moves
+    return towards_moves
 
 
 def remove_direction(direction: str, possible_moves: List[str]) -> List[str]:
@@ -197,7 +197,10 @@ def choose_move(data: dict) -> str:
     # Move towards the closest food
     food = data["board"]["food"]
     closest_food = find_closest_food(my_head, food)
-    move = move_towards_food(my_head, closest_food, possible_moves)
+    possible_moves = move_towards_food(my_head, closest_food, possible_moves)
+
+    # Choose a random direction from the remaining possible_moves to move in, and then return that move
+    move = random.choice(possible_moves)
 
     # TODO: Explore new strategies for picking a move that are better than random
 
