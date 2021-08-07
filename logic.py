@@ -87,6 +87,67 @@ def avoid_board_edge(my_head: Dict[str, int], board_height: int, board_width: in
     return possible_moves
 
 
+def find_closest_food(my_head: Dict[str, int], foods: List[Dict[str, int]]) -> Dict[str, int]:
+    """
+    my_head: Dictionary of x/y coordinates of the Battlesnake head.
+            e.g. {"x": 0, "y": 0}
+    foods: List of dictionaries of x/y coordinates for every food location on the board.
+            e.g. [ {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0} ]
+    possible_moves: List of strings. Moves to pick from.
+            e.g. ["up", "down", "left", "right"]
+
+    return: The closest
+    """
+    closest_distance = None
+    closest_food = None
+    for food in foods:
+        x_offset = my_head["x"] - food["x"]
+        y_offset = my_head["y"] - food["y"]
+        distance = x_offset ** 2 + y_offset ** 2
+        if closest_distance is None or distance < closest_distance:
+            closest_distance = distance
+            closest_food = food
+
+    print(closest_food)
+    return closest_food
+
+
+def move_towards_food(my_head: Dict[str, int], food: Dict[str, int], possible_moves: List[str]) -> str:
+    """
+    my_head: Dictionary of x/y coordinates of the Battlesnake head.
+            e.g. {"x": 0, "y": 0}
+    food: Dictionary of x/y coordinates of the food location.
+            e.g. {"x": 0, "y": 0}
+    possible_moves: List of strings. Moves to pick from.
+            e.g. ["up", "down", "left", "right"]
+
+    return: The move which moves towards the closest food location
+    """
+    if food is None:
+        return random.choice(possible_moves)
+
+    towards_moves = []
+
+    # Head is left of the food
+    if my_head["x"] > food["x"]:
+        if "left" in possible_moves:
+            towards_moves.append("left")
+    # Head is right of the food
+    elif my_head["x"] < food["x"]:
+        if "right" in possible_moves:
+            towards_moves.append("right")
+    # Head is above the food
+    if my_head["y"] > food["y"]:
+        if "down" in possible_moves:
+            towards_moves.append("down")
+    # Head is below the food
+    elif my_head["y"] < food["y"]:
+        if "up" in possible_moves:
+            towards_moves.append("up")
+
+    return random.choice(towards_moves)
+
+
 def remove_direction(direction: str, possible_moves: List[str]) -> List[str]:
     if direction in possible_moves:
         possible_moves.remove(direction)
@@ -133,12 +194,11 @@ def choose_move(data: dict) -> str:
     possible_moves = avoid_board_edge(
         my_head, board_height, board_width, possible_moves)
 
-    # TODO: Using information from 'data', don't let your Battlesnake pick a move that would collide with another Battlesnake
+    # Move towards the closest food
+    food = data["board"]["food"]
+    closest_food = find_closest_food(my_head, food)
+    move = move_towards_food(my_head, closest_food, possible_moves)
 
-    # TODO: Using information from 'data', make your Battlesnake move towards a piece of food on the board
-
-    # Choose a random direction from the remaining possible_moves to move in, and then return that move
-    move = random.choice(possible_moves)
     # TODO: Explore new strategies for picking a move that are better than random
 
     print(f"{data['game']['id']} MOVE {data['turn']}: {move} picked from all valid options in {possible_moves}")
