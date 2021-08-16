@@ -1,18 +1,7 @@
-"""
-Starter Unit Tests using the built-in Python unittest library.
-See https://docs.python.org/3/library/unittest.html
-
-You can expand these to cover more cases!
-
-To run the unit tests, use the following command in your terminal,
-in the folder where this file exists:
-
-    python tests.py -v
-
-"""
+from movement.directions import Direction
 import unittest
 
-from logic import avoid_my_neck, avoid_body
+from movement.avoidance import avoid_my_neck, avoid_body
 
 
 class AvoidNeckTest(unittest.TestCase):
@@ -26,7 +15,8 @@ class AvoidNeckTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 5, "y": 5}
         test_body = [{"x": 5, "y": 5}, {"x": 5, "y": 5}, {"x": 5, "y": 5}]
-        possible_moves = ["up", "down", "left", "right"]
+        possible_moves = [Direction.UP, Direction.DOWN,
+                          Direction.LEFT, Direction.RIGHT]
 
         # Act
         result_moves = avoid_my_neck(test_head, test_body, possible_moves)
@@ -39,8 +29,9 @@ class AvoidNeckTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 5, "y": 5}
         test_body = [{"x": 5, "y": 5}, {"x": 4, "y": 5}, {"x": 3, "y": 5}]
-        possible_moves = ["up", "down", "left", "right"]
-        expected = ["up", "down", "right"]
+        possible_moves = [Direction.UP, Direction.DOWN,
+                          Direction.LEFT, Direction.RIGHT]
+        expected = [Direction.UP, Direction.DOWN, Direction.RIGHT]
 
         # Act
         result_moves = avoid_my_neck(test_head, test_body, possible_moves)
@@ -53,8 +44,9 @@ class AvoidNeckTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 5, "y": 5}
         test_body = [{"x": 5, "y": 5}, {"x": 6, "y": 5}, {"x": 7, "y": 5}]
-        possible_moves = ["up", "down", "left", "right"]
-        expected = ["up", "down", "left"]
+        possible_moves = [Direction.UP, Direction.DOWN,
+                          Direction.LEFT, Direction.RIGHT]
+        expected = [Direction.UP, Direction.DOWN, Direction.LEFT]
 
         # Act
         result_moves = avoid_my_neck(test_head, test_body, possible_moves)
@@ -67,8 +59,9 @@ class AvoidNeckTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 5, "y": 5}
         test_body = [{"x": 5, "y": 5}, {"x": 5, "y": 6}, {"x": 5, "y": 7}]
-        possible_moves = ["up", "down", "left", "right"]
-        expected = ["down", "left", "right"]
+        possible_moves = [Direction.UP, Direction.DOWN,
+                          Direction.LEFT, Direction.RIGHT]
+        expected = [Direction.DOWN, Direction.LEFT, Direction.RIGHT]
 
         # Act
         result_moves = avoid_my_neck(test_head, test_body, possible_moves)
@@ -81,8 +74,9 @@ class AvoidNeckTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 5, "y": 5}
         test_body = [{"x": 5, "y": 5}, {"x": 5, "y": 4}, {"x": 5, "y": 3}]
-        possible_moves = ["up", "down", "left", "right"]
-        expected = ["up", "left", "right"]
+        possible_moves = [Direction.UP, Direction.DOWN,
+                          Direction.LEFT, Direction.RIGHT]
+        expected = [Direction.UP, Direction.LEFT, Direction.RIGHT]
 
         # Act
         result_moves = avoid_my_neck(test_head, test_body, possible_moves)
@@ -103,7 +97,8 @@ class AvoidBodyTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 5, "y": 5}
         test_body = [{"x": 5, "y": 5}, {"x": 5, "y": 5}, {"x": 5, "y": 5}]
-        possible_moves = ["up", "down", "left", "right"]
+        possible_moves = [Direction.UP, Direction.DOWN,
+                          Direction.LEFT, Direction.RIGHT]
 
         # Act
         result_moves = avoid_body(test_head, test_body, possible_moves)
@@ -116,8 +111,9 @@ class AvoidBodyTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 5, "y": 5}
         test_body = [{"x": 5, "y": 5}, {"x": 4, "y": 5}, {"x": 3, "y": 5}]
-        possible_moves = ["up", "down", "left", "right"]
-        expected = ["up", "down", "right"]
+        possible_moves = [Direction.UP, Direction.DOWN,
+                          Direction.LEFT, Direction.RIGHT]
+        expected = [Direction.UP, Direction.DOWN, Direction.RIGHT]
 
         # Act
         result_moves = avoid_body(test_head, test_body, possible_moves)
@@ -130,8 +126,9 @@ class AvoidBodyTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 5, "y": 5}
         test_body = [{"x": 5, "y": 5}, {"x": 6, "y": 5}, {"x": 7, "y": 5}]
-        possible_moves = ["up", "down", "left", "right"]
-        expected = ["up", "down", "left"]
+        possible_moves = [Direction.UP, Direction.DOWN,
+                          Direction.LEFT, Direction.RIGHT]
+        expected = [Direction.UP, Direction.DOWN, Direction.LEFT]
 
         # Act
         result_moves = avoid_body(test_head, test_body, possible_moves)
@@ -144,8 +141,9 @@ class AvoidBodyTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 5, "y": 5}
         test_body = [{"x": 5, "y": 5}, {"x": 5, "y": 6}, {"x": 5, "y": 7}]
-        possible_moves = ["up", "down", "left", "right"]
-        expected = ["down", "left", "right"]
+        possible_moves = [Direction.UP, Direction.DOWN,
+                          Direction.LEFT, Direction.RIGHT]
+        expected = [Direction.DOWN, Direction.LEFT, Direction.RIGHT]
 
         # Act
         result_moves = avoid_body(test_head, test_body, possible_moves)
@@ -158,8 +156,9 @@ class AvoidBodyTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 5, "y": 5}
         test_body = [{"x": 5, "y": 5}, {"x": 5, "y": 4}, {"x": 5, "y": 3}]
-        possible_moves = ["up", "down", "left", "right"]
-        expected = ["up", "left", "right"]
+        possible_moves = [Direction.UP, Direction.DOWN,
+                          Direction.LEFT, Direction.RIGHT]
+        expected = [Direction.UP, Direction.LEFT, Direction.RIGHT]
 
         # Act
         result_moves = avoid_body(test_head, test_body, possible_moves)
@@ -173,8 +172,9 @@ class AvoidBodyTest(unittest.TestCase):
         test_head = {"x": 5, "y": 5}
         test_body = [{"x": 5, "y": 5}, {"x": 5, "y": 4},
                      {"x": 4, "y": 4}, {"x": 4, "y": 5}]
-        possible_moves = ["up", "down", "left", "right"]
-        expected = ["up", "right"]
+        possible_moves = [Direction.UP, Direction.DOWN,
+                          Direction.LEFT, Direction.RIGHT]
+        expected = [Direction.UP, Direction.RIGHT]
 
         # Act
         result_moves = avoid_body(test_head, test_body, possible_moves)
