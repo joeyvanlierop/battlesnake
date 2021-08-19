@@ -5,10 +5,10 @@ use crate::{
     snake::{Battlesnake, Direction},
 };
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, PartialEq, Deserialize, Serialize, Debug)]
 pub struct Board {
-    pub height: u32,
-    pub width: u32,
+    pub height: i8,
+    pub width: i8,
     pub food: Vec<Coord>,
     pub snakes: Vec<Battlesnake>,
 }
@@ -41,8 +41,8 @@ impl Board {
         }
 
         // Moved out of bounds
-        if snake.head.x <= 0
-            || snake.head.y <= 0
+        if snake.head.x < 0
+            || snake.head.y < 0
             || snake.head.x >= self.width
             || snake.head.y >= self.height
         {
@@ -78,7 +78,7 @@ impl Board {
 #[test]
 fn test_tick_normal() {
     // Arrange
-    let board = &mut Board {
+    let mut board = Board {
         width: 5,
         height: 5,
         food: vec![],
@@ -94,21 +94,20 @@ fn test_tick_normal() {
             ],
         }],
     };
+    let mut expected_board = board.clone();
 
     // Act
     board.tick(0, Direction::RIGHT);
+    expected_board.snakes[0].do_move(&Direction::RIGHT);
 
     // Assert
-    assert_eq!(board.snakes[0].body.len(), 3);
-    assert_eq!(*board.snakes[0].body.last().unwrap(), Coord { x: 1, y: 0 });
-    assert_eq!(board.snakes[0].head.x, 3);
-    assert_eq!(board.snakes[0].health, 49);
+    assert_eq!(board, expected_board);
 }
 
 #[test]
 fn test_tick_eat() {
     // Arrange
-    let board = &mut Board {
+    let mut board = Board {
         width: 5,
         height: 5,
         food: vec![Coord { x: 3, y: 0 }, Coord { x: 4, y: 0 }],
@@ -124,15 +123,70 @@ fn test_tick_eat() {
             ],
         }],
     };
+    let mut expected_board = board.clone();
 
     // Act
     board.tick(0, Direction::RIGHT);
+    expected_board.food.remove(0);
+    expected_board.snakes[0].do_move(&Direction::RIGHT);
+    expected_board.snakes[0].eat();
 
     // Assert
-    assert_eq!(board.snakes[0].body.len(), 4);
-    assert_eq!(*board.snakes[0].body.last().unwrap(), Coord { x: 1, y: 0 });
-    assert_eq!(board.snakes[0].head.x, 3);
-    assert_eq!(board.snakes[0].health, 100);
-    assert_eq!(board.food.len(), 1);
-    assert_eq!(board.food[0], Coord { x: 4, y: 0 });
+    assert_eq!(board, expected_board);
+}
+
+#[test]
+fn test_die() {
+    for test_case in [
+        (Direction::UP, false),   // Collide with equal snake
+        (Direction::RIGHT, true), // Collide with smaller snake
+        (Direction::DOWN, false), // Move off of board
+        (Direction::LEFT, false), // Collide with self
+    ]
+    .iter()
+    {
+        // Arrange
+        let mut board = Board {
+            width: 5,
+            height: 5,
+            food: vec![],
+            snakes: vec![
+                Battlesnake {
+                    id: String::from("abc"),
+                    health: 50,
+                    length: 3,
+                    head: Coord { x: 2, y: 0 },
+                    body: vec![
+                        Coord { x: 2, y: 0 },
+                        Coord { x: 1, y: 0 },
+                        Coord { x: 0, y: 0 },
+                    ],
+                },
+                Battlesnake {
+                    id: String::from("def"),
+                    health: 50,
+                    length: 3,
+                    head: Coord { x: 2, y: 1 },
+                    body: vec![
+                        Coord { x: 2, y: 1 },
+                        Coord { x: 2, y: 2 },
+                        Coord { x: 2, y: 3 },
+                    ],
+                },
+                Battlesnake {
+                    id: String::from("ghi"),
+                    health: 50,
+                    length: 2,
+                    head: Coord { x: 3, y: 0 },
+                    body: vec![Coord { x: 3, y: 0 }, Coord { x: 4, y: 0 }],
+                },
+            ],
+        };
+
+        // Act
+        board.tick(0, test_case.0);
+
+        // Assert
+        assert_eq!(test_case.1, board.is_alive(0));
+    }
 }
