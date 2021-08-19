@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 use log::info;
 
-use crate::{engine::Battlesnake, engine::Board, engine::Game};
+use crate::{game_state::Game, snake::Battlesnake};
 
 pub fn get_info() -> JsonValue {
     info!("INFO");
@@ -19,15 +19,15 @@ pub fn get_info() -> JsonValue {
     });
 }
 
-pub fn start(game: &Game, _turn: &u32, _board: &Board, _you: &Battlesnake) {
+pub fn start(game: &Game) {
     info!("{} START", game.id);
 }
 
-pub fn end(game: &Game, _turn: &u32, _board: &Board, _you: &Battlesnake) {
+pub fn end(game: &Game) {
     info!("{} END", game.id);
 }
 
-pub fn get_move(game: &Game, _turn: &u32, _board: &Board, you: &Battlesnake) -> &'static str {
+pub fn get_move(game: &Game, you: &Battlesnake) -> &'static str {
     let mut possible_moves: HashMap<_, _> = vec![
         ("up", true),
         ("down", true),

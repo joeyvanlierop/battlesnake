@@ -4,40 +4,33 @@ use log::info;
 use rocket::{config::Environment, http::Status, Config};
 use rocket_contrib::json::{Json, JsonValue};
 
-use crate::{engine::GameState, logic};
+use crate::{
+    game_state::GameState,
+    logic::{end, get_info, get_move, start},
+};
 
 #[get("/")]
 fn handle_index() -> JsonValue {
-    logic::get_info()
+    get_info()
 }
 
 #[post("/start", format = "json", data = "<start_req>")]
 fn handle_start(start_req: Json<GameState>) -> Status {
-    logic::start(
-        &start_req.game,
-        &start_req.turn,
-        &start_req.board,
-        &start_req.you,
-    );
+    start(&start_req.game);
 
     Status::Ok
 }
 
 #[post("/move", format = "json", data = "<move_req>")]
 fn handle_move(move_req: Json<GameState>) -> JsonValue {
-    let chosen = logic::get_move(
-        &move_req.game,
-        &move_req.turn,
-        &move_req.board,
-        &move_req.you,
-    );
+    let chosen = get_move(&move_req.game, &move_req.you);
 
     return json!({ "move": chosen });
 }
 
 #[post("/end", format = "json", data = "<end_req>")]
 fn handle_end(end_req: Json<GameState>) -> Status {
-    logic::end(&end_req.game, &end_req.turn, &end_req.board, &end_req.you);
+    end(&end_req.game);
 
     Status::Ok
 }
