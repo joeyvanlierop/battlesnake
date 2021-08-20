@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::coord::Coord;
 
+const MAX_HEALTH: u8 = 100;
+
 #[derive(Copy, Clone, Deserialize, Serialize, PartialEq, Debug)]
 pub enum Direction {
     UP,
@@ -10,11 +12,24 @@ pub enum Direction {
     LEFT,
 }
 
+impl Direction {
+    pub fn iter() -> impl Iterator<Item = Direction> {
+        [
+            Direction::UP,
+            Direction::RIGHT,
+            Direction::DOWN,
+            Direction::LEFT,
+        ]
+        .iter()
+        .copied()
+    }
+}
+
 #[derive(Clone, Deserialize, Serialize, PartialEq, Debug)]
 pub struct Battlesnake {
     pub id: String,
-    pub health: u32,
-    pub length: u32,
+    pub health: u8,
+    pub length: u8,
     pub body: Vec<Coord>,
     pub head: Coord,
 }
@@ -32,7 +47,7 @@ impl Battlesnake {
         }
 
         // Create and assign the new head
-        let new_head = Coord { x: new_x, y: new_y };
+        let new_head = Coord::new(new_x, new_y);
         self.head = new_head;
         self.body.insert(0, new_head);
 
@@ -45,8 +60,7 @@ impl Battlesnake {
 
     pub fn eat(&mut self) {
         // Reset health to maximum
-        // TODO: Add a MAX_HEALTH constant
-        self.health = 100;
+        self.health = MAX_HEALTH;
 
         // Extend body
         let new_tail = self.body.last().unwrap().clone();
